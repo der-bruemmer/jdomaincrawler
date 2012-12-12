@@ -1,4 +1,4 @@
-package jdomaincrawler.threads;
+package jdomaincrawler.stripper;
 
 import java.io.IOException;
 
@@ -6,15 +6,13 @@ import org.apache.commons.io.output.LockableFileWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Writer implements Runnable{
+public class Writer {
 	
 	private static final Logger logger = LoggerFactory.getLogger("Writer");
-	
-	private String file;
-	private String text;
 
-	@Override
-	public void run() {
+
+	
+	public void write(String text, String file) {
 		LockableFileWriter writer = null;
 		try {
 			writer = new LockableFileWriter(file, true);

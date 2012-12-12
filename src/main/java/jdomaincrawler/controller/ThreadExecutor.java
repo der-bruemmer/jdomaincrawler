@@ -1,10 +1,9 @@
-package jdomaincrawler.threads;
+package jdomaincrawler.controller;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import jdomaincrawler.properties.PropertiesFactory;
 ;
 
 public class ThreadExecutor {

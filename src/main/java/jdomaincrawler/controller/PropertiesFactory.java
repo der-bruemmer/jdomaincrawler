@@ -1,4 +1,4 @@
-package jdomaincrawler.properties;
+package jdomaincrawler.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
