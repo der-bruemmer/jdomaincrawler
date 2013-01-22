@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jdomaincrawler.crawler.Crawler;
 import jdomaincrawler.stripper.Stripper;
@@ -20,6 +22,7 @@ public class Controller {
 	private static Logger logger = LoggerFactory.getLogger(Controller.class);
 	private ThreadExecutor threadExec = new ThreadExecutor();
 	private Map<String, Integer> domainFilesMap;
+	private static String regexFile = "^.\\s(.+?)\\s+.*?";
 
 	public void init() {
 		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
@@ -31,22 +34,30 @@ public class Controller {
 		threadExec.setTimeout(Integer.valueOf(PropertiesFactory.getProperties()
 				.getProperty("timeout", "2")));
 		domainFilesMap = new HashMap<String, Integer>();
+		threadExec.init();
 	}
 
-	private void generateCrawlers() {
+	public void generateCrawlers() {
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(PropertiesFactory
 					.getProperties().getProperty("domainfile")));
+
+			Pattern pattern = Pattern.compile(regexFile);
 			String domain;
 			String domainName;
 			Crawler crawler;
+			Matcher m;
 			while (reader.ready()) {
-				domain = reader.readLine();
-				domainName = new URL(domain).getHost();
-				crawler = new Crawler(domain, PropertiesFactory.getProperties()
-						.getProperty("crawlpath") + "/" + domainName, this);
-				threadExec.executeTask(crawler);
+				m = pattern.matcher(reader.readLine());
+				if (m.matches()) {
+					domain = m.group(1);
+					if (!domain.equals("dom")) {
+						domainName=domain.replaceAll("\\.", "_");
+						crawler=new Crawler(domain, domainName, this);
+						threadExec.executeTask(crawler);
+					}
+				}
 			}
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());
@@ -63,11 +74,27 @@ public class Controller {
 		}
 	}
 
+	public void test() {
+		for (int i = 0; i < 10; i++) {
+			Crawler c = new Crawler("", "", this);
+			Stripper s = new Stripper("", "", this);
+			threadExec.executeTask(c);
+			threadExec.executeTask(s);
+		}
+		threadExec.shutdown();
+	}
+
 	public synchronized void stripFinished(String domain) {
 
 	}
 
 	public synchronized void crawlFinished(String domain) {
 
+	}
+
+	public static void main(String[] args) {
+		Controller c = new Controller();
+		c.init();
+		c.generateCrawlers();
 	}
 }
