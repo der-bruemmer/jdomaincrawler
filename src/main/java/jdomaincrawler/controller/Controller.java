@@ -53,9 +53,13 @@ public class Controller {
 				if (m.matches()) {
 					domain = m.group(1);
 					if (!domain.equals("dom")) {
-						domainName=domain.replaceAll("\\.", "_");
-						crawler=new Crawler(domain, domainName, this);
+						domainName = domain.replaceAll("\\.", "_");
+						crawler = new Crawler(domain, PropertiesFactory
+								.getProperties().getProperty("crawlpath",
+										"~/crawler/")
+								+ domainName, this);
 						threadExec.executeTask(crawler);
+						break;
 					}
 				}
 			}
@@ -66,7 +70,7 @@ public class Controller {
 		}
 	}
 
-	private void generateStrippers(List<String> files, String domainOutput) {
+	public void generateStrippers(List<String> files, String domainOutput) {
 		Stripper stripper;
 		for (String file : files) {
 			stripper = new Stripper(file, domainOutput, this);
@@ -89,7 +93,9 @@ public class Controller {
 	}
 
 	public synchronized void crawlFinished(String domain) {
-
+		String dir = PropertiesFactory.getProperties().getProperty("crawlpath")
+				+ domain.replaceAll("\\.", "_");
+		threadExec.executeTask(new DirExplorer(dir, domain, this));
 	}
 
 	public static void main(String[] args) {

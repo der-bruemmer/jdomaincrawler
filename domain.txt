@@ -2,7 +2,7 @@ mysql> select left(substr(source,8),instr(substr(source,8),"/")) dom, count(*) a
 +---------------------------------+--------+
 | dom                             | cnt    |
 +---------------------------------+--------+
-| www.n24.de/                     | 910582 |
+| localhost/                     | 910582 |
 | www.pressetext.at/              | 743690 |
 | www.news.ch/                    | 743331 |
 | www.20min.ch/                   | 694800 |
