@@ -23,7 +23,7 @@ public class Controller {
 	private ThreadExecutor threadExec = new ThreadExecutor();
 	private Map<String, Integer> domainFilesMap;
 	private static String regexFile = "^.\\s(.+?)\\s+.*?";
-
+	private static int numberOfDomains;
 	public void init() {
 		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
 		threadExec = new ThreadExecutor();
@@ -59,6 +59,7 @@ public class Controller {
 										"~/crawler/")
 								+ domainName, this);
 						threadExec.executeTask(crawler);
+						numberOfDomains++;
 						break;
 					}
 				}
@@ -75,6 +76,10 @@ public class Controller {
 		for (String file : files) {
 			stripper = new Stripper(file, domainOutput, this);
 			threadExec.executeTask(stripper);
+		}
+		numberOfDomains--;
+		if(numberOfDomains==0){
+			threadExec.shutdown();
 		}
 	}
 
