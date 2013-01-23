@@ -60,7 +60,6 @@ public class Controller {
 								+ domainName, this);
 						threadExec.executeTask(crawler);
 						numberOfDomains++;
-						break;
 					}
 				}
 			}
