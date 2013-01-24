@@ -14,24 +14,21 @@ import jdomaincrawler.controller.PropertiesFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Crawler implements Runnable{
-	
+public class Crawler implements Runnable {
+
 	Logger logger = LoggerFactory.getLogger(Crawler.class);
-	
+
 	private String domain;
 	private String path;
 	private Controller controller;
-	
-	
 
-	public Crawler(String domain, String path, Controller controller) {
+	public Crawler(final String domain, final String path,
+			final Controller controller) {
 		super();
 		this.domain = domain;
 		this.path = path;
 		this.controller = controller;
 	}
-
-
 
 	@Override
 	public void run() {
@@ -42,41 +39,37 @@ public class Crawler implements Runnable{
 		options.add(domain);
 		options.add("-O");
 		options.add(path);
-		String[] optprop = PropertiesFactory.getProperties().getProperty("httrack").split("\\s");
+		String[] optprop = PropertiesFactory.getProperties()
+				.getProperty("httrack").split("\\s");
 		options.addAll(Arrays.asList(optprop));
 		ProcessBuilder builder = new ProcessBuilder(options);
 		builder.directory(new File(path));
 		builder.redirectErrorStream(true);
-		Process process=null;
-		BufferedReader reader=null;
+		Process process = null;
+		BufferedReader reader = null;
 		try {
-			 process = builder.start();
-			reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			process = builder.start();
+			reader = new BufferedReader(new InputStreamReader(
+					process.getInputStream()));
 			String line;
-			while((line=reader.readLine())!=null){
-				logger.debug("httrack: {}",line);
+			while ((line = reader.readLine()) != null) {
+				logger.debug("httrack: {}", line);
 			}
 			process.waitFor();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		} catch (InterruptedException e) {
-			process.destroy();	
+			process.destroy();
 		} finally {
 			try {
-				
+
 				reader.close();
-			
+
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 			}
 		}
 		this.controller.crawlFinished(this.domain);
-	}
-	
-	public static void main(String[] args) {
-		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
-		Crawler c = new Crawler("localhost", "/Users/didier/crawler/test", new Controller());
-		c.run();
 	}
 
 }

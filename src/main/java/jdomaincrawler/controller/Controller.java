@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,41 +69,27 @@ public class Controller {
 		}
 	}
 
-	public void generateStrippers(List<String> files, String domainOutput) {
+	public void generateStrippers(final List<String> files,
+			final String domainOutput) {
 		Stripper stripper;
 		for (String file : files) {
 			stripper = new Stripper(file, domainOutput, this);
 			threadExec.executeTask(stripper);
 		}
 		numberOfDomains--;
-		if(numberOfDomains==0){
+		if (numberOfDomains == 0) {
 			threadExec.shutdown();
 		}
 	}
 
-	public void test() {
-		for (int i = 0; i < 10; i++) {
-			Crawler c = new Crawler("", "", this);
-			Stripper s = new Stripper("", "", this);
-			threadExec.executeTask(c);
-			threadExec.executeTask(s);
-		}
-		threadExec.shutdown();
-	}
-
-	public synchronized void stripFinished(String domain) {
+	public synchronized void stripFinished(final String domain) {
 
 	}
 
-	public synchronized void crawlFinished(String domain) {
+	public synchronized void crawlFinished(final String domain) {
 		String dir = PropertiesFactory.getProperties().getProperty("crawlpath")
 				+ domain.replaceAll("\\.", "_");
 		threadExec.executeTask(new DirExplorer(dir, domain, this));
 	}
 
-	public static void main(String[] args) {
-		Controller c = new Controller();
-		c.init();
-		c.generateCrawlers();
-	}
 }

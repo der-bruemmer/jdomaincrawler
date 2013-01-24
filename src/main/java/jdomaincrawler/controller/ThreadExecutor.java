@@ -11,9 +11,12 @@ import jdomaincrawler.stripper.Stripper;
 ;
 
 public class ThreadExecutor {
-	private int poolSize = 2;
-	private int maxPoolSize = 8;
-	private int timeout = 2;
+	private int poolSize = Integer.valueOf(PropertiesFactory.getProperties()
+			.getProperty("minPoolSize", "2"));
+	private int maxPoolSize = Integer.valueOf(PropertiesFactory.getProperties()
+			.getProperty("maxPoolSize", "8"));
+	private int timeout = Integer.valueOf(PropertiesFactory.getProperties()
+			.getProperty("timeout", "2"));
 	private ThreadPoolExecutor threadPool = null;
 	private PriorityBlockingQueue<Runnable> queue;
 
@@ -25,7 +28,7 @@ public class ThreadExecutor {
 		Comparator<Runnable> comp = new Comparator<Runnable>() {
 
 			@Override
-			public int compare(Runnable o1, Runnable o2) {
+			public int compare(final Runnable o1, final Runnable o2) {
 
 				if (o1 instanceof Crawler) {
 					if (o2 instanceof Crawler) {
@@ -51,12 +54,14 @@ public class ThreadExecutor {
 				return 0;
 			}
 		};
-		queue = new PriorityBlockingQueue<Runnable>(11, comp);
+		queue = new PriorityBlockingQueue<Runnable>(
+				Integer.valueOf(PropertiesFactory.getProperties().getProperty(
+						"queueLength", "11")), comp);
 		threadPool = new ThreadPoolExecutor(poolSize, maxPoolSize, timeout,
 				TimeUnit.SECONDS, queue);
 	}
 
-	public void executeTask(Runnable task) {
+	public void executeTask(final Runnable task) {
 		threadPool.execute(task);
 	}
 
@@ -68,7 +73,7 @@ public class ThreadExecutor {
 		return poolSize;
 	}
 
-	public void setPoolSize(int poolSize) {
+	public void setPoolSize(final int poolSize) {
 		this.poolSize = poolSize;
 	}
 
@@ -76,7 +81,7 @@ public class ThreadExecutor {
 		return maxPoolSize;
 	}
 
-	public void setMaxPoolSize(int maxPoolSize) {
+	public void setMaxPoolSize(final int maxPoolSize) {
 		this.maxPoolSize = maxPoolSize;
 	}
 
@@ -84,7 +89,7 @@ public class ThreadExecutor {
 		return timeout;
 	}
 
-	public void setTimeout(int timeout) {
+	public void setTimeout(final int timeout) {
 		this.timeout = timeout;
 	}
 }

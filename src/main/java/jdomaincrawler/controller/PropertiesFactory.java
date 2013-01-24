@@ -13,21 +13,23 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A class to load and store properties
+ * 
  * @author didier
- *
+ * 
  */
 public class PropertiesFactory {
-	private static final Logger logger = LoggerFactory.getLogger(PropertiesFactory.class);
-	
+	private static final Logger logger = LoggerFactory
+			.getLogger(PropertiesFactory.class);
+
 	private static PropertiesFactory instance = new PropertiesFactory();
-	private static Map<String,Properties> propertiesMap = null;
+	private static Map<String, Properties> propertiesMap = null;
 	private static Properties defaultProperties = null;
 	private static String defaultPath;
-	
-	private PropertiesFactory(){
+
+	private PropertiesFactory() {
 	}
-	
-	public static void loadProperties(String path, boolean def){
+
+	public static void loadProperties(final String path, final boolean def) {
 		Properties properties = null;
 		FileInputStream input = null;
 		try {
@@ -35,37 +37,37 @@ public class PropertiesFactory {
 			input = new FileInputStream(new File(path));
 			properties.load(input);
 		} catch (FileNotFoundException e) {
-			logger.error(e.getMessage(),e);
+			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
-			logger.error(e.getMessage(),e);
+			logger.error(e.getMessage(), e);
 		} finally {
 			try {
 				input.close();
 			} catch (IOException e) {
-				logger.error(e.getMessage(),e);
+				logger.error(e.getMessage(), e);
 			}
 		}
-		if(def){
+		if (def) {
 			defaultProperties = properties;
-			defaultPath=path;
+			defaultPath = path;
 		} else {
-			if(propertiesMap == null){
+			if (propertiesMap == null) {
 				propertiesMap = new HashMap<String, Properties>();
 			}
 			propertiesMap.put(path, properties);
 		}
 		logger.debug("Properties {} loaded", path);
 	}
-	
-	public static Properties getProperties(){
+
+	public static Properties getProperties() {
 		return defaultProperties;
 	}
-	
-	public static Properties getProperties(String path){
-		if(path.equals(defaultPath)){
+
+	public static Properties getProperties(final String path) {
+		if (path.equals(defaultPath)) {
 			return defaultProperties;
 		}
-		if(propertiesMap==null || propertiesMap.get(path)==null){
+		if (propertiesMap == null || propertiesMap.get(path) == null) {
 			loadProperties(path, false);
 		}
 		return propertiesMap.get(path);

@@ -4,18 +4,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import jdomaincrawler.stripper.Stripper;
-
 public class DirExplorer implements Runnable {
 
 	private String dir = "/Users/didier/cralwer/";
 	private Controller controller;
 	private String domain;
 
-	public DirExplorer(String dir, String domain,Controller controller) {
+	public DirExplorer(final String dir, final String domain,
+			final Controller controller) {
 		super();
 		this.dir = dir;
-		this.domain=domain;
+		this.domain = domain;
 		this.controller = controller;
 	}
 
@@ -26,7 +25,7 @@ public class DirExplorer implements Runnable {
 		controller.generateStrippers(files, domain);
 	}
 
-	public List<String> findFiles(String[] files, String path) {
+	public List<String> findFiles(final String[] files, final String path) {
 		File f;
 		ArrayList<String> filePaths = new ArrayList<String>();
 		for (String file : files) {
