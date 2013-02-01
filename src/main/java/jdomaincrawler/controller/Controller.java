@@ -69,11 +69,11 @@ public class Controller {
 		}
 	}
 
-	public void generateStrippers(final List<String> files,
+	public void generateStrippers(final List<String[]> files,
 			final String domainOutput) {
 		Stripper stripper;
-		for (String file : files) {
-			stripper = new Stripper(file, domainOutput, this);
+		for (String[] file : files) {
+			stripper = new Stripper(file[0],file[1], domainOutput, this);
 			threadExec.executeTask(stripper);
 		}
 		numberOfDomains--;
@@ -83,13 +83,20 @@ public class Controller {
 	}
 
 	public synchronized void stripFinished(final String domain) {
-
+		logger.info("Domain {} finished",domain);
 	}
 
 	public synchronized void crawlFinished(final String domain) {
 		String dir = PropertiesFactory.getProperties().getProperty("crawlpath")
 				+ domain.replaceAll("\\.", "_");
 		threadExec.executeTask(new DirExplorer(dir, domain, this));
+	}
+	
+	public static void main(String[] args) {
+		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
+		Controller c = new Controller();
+		c.init();
+		c.generateCrawlers();
 	}
 
 }
