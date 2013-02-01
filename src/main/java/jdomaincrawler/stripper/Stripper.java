@@ -26,6 +26,7 @@ public class Stripper implements Runnable {
 	private String outputFile;
 	private String url;
 	private Controller controller;
+	private Writer w;
 
 	/**
 	 * 
@@ -40,7 +41,7 @@ public class Stripper implements Runnable {
 		this.outputFile = outputFile;
 		this.controller = controller;
 		this.url = url;
-
+		this.w = new Writer();
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class Stripper implements Runnable {
 			buffer.append("</source>");
 			buffer.append(ht.getUTF8Text());
 			buffer.append("\n\n");
-			Writer w = new Writer();
+
 			w.write(buffer.toString(), outputFile);
 		}
 	}

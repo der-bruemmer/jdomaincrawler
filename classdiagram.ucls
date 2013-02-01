@@ -1,103 +1,128 @@
 <class-diagram version="1.0.11" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.Controller" 
-    project="jdomaincrawler" file="/jdomaincrawler/src/main/java/jdomaincrawler/controller/Controller.java" 
-    binary="false">    
-    <position height="264" width="256" x="779" y="283"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="2" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.DirExplorer" 
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.DirExplorer" 
     project="jdomaincrawler" file="/jdomaincrawler/src/main/java/jdomaincrawler/controller/DirExplorer.java" 
     binary="false">    
-    <position height="145" width="219" x="520" y="37"/>    
+    <position height="162" width="219" x="603" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="3" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.PropertiesFactory" 
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.PropertiesFactory" 
     project="jdomaincrawler" file="/jdomaincrawler/src/main/java/jdomaincrawler/controller/PropertiesFactory.java" 
     binary="false">    
-    <position height="196" width="238" x="232" y="37"/>    
+    <position height="196" width="238" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.ThreadExecutor" 
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.Controller" 
+    project="jdomaincrawler" file="/jdomaincrawler/src/main/java/jdomaincrawler/controller/Controller.java" 
+    binary="false">    
+    <position height="247" width="262" x="578" y="283"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.ShutdownHook" 
+    project="jdomaincrawler" file="/jdomaincrawler/src/main/java/jdomaincrawler/controller/ShutdownHook.java" 
+    binary="false">    
+    <position height="111" width="203" x="144" y="283"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.controller.ThreadExecutor" 
     project="jdomaincrawler" file="/jdomaincrawler/src/main/java/jdomaincrawler/controller/ThreadExecutor.java" 
     binary="false">    
-    <position height="315" width="255" x="779" y="587"/>    
+    <position height="332" width="255" x="361" y="570"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.crawler.Crawler" project="jdomaincrawler" 
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.crawler.Crawler" project="jdomaincrawler" 
     file="/jdomaincrawler/src/main/java/jdomaincrawler/crawler/Crawler.java" binary="false">    
-    <position height="162" width="199" x="1018" y="37"/>    
+    <position height="145" width="199" x="862" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="6" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.stripper.Writer" project="jdomaincrawler" 
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.stripper.Writer" project="jdomaincrawler" 
     file="/jdomaincrawler/src/main/java/jdomaincrawler/stripper/Writer.java" binary="false">    
-    <position height="111" width="151" x="41" y="37"/>    
+    <position height="111" width="151" x="387" y="283"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="7" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.stripper.Stripper" project="jdomaincrawler" 
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="jdomaincrawler.stripper.Stripper" project="jdomaincrawler" 
     file="/jdomaincrawler/src/main/java/jdomaincrawler/stripper/Stripper.java" binary="false">    
-    <position height="145" width="199" x="779" y="37"/>    
+    <position height="162" width="234" x="329" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <association id="8">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="9" name="controller"/>      
-      <multiplicity id="10" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="11">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="12" name="threadExec"/>      
-      <multiplicity id="13" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="14">    
+  <association id="9">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="15" name="instance"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
+      <attribute id="10" name="threadExec"/>      
+      <multiplicity id="11" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="12">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="13" name="instance"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="15">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="16" name="w"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="18">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="19" name="executor"/>      
+      <multiplicity id="20" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="21">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="22" name="controller"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="17">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="18" name="controller"/>      
-      <multiplicity id="19" minimum="0" maximum="1"/>    
+  <association id="24">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="25" name="controller"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
+    <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="20">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="21" name="controller"/>      
-      <multiplicity id="22" minimum="0" maximum="1"/>    
+  <association id="27">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="28" name="controller"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
+    <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
