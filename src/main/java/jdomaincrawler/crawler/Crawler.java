@@ -51,10 +51,17 @@ public class Crawler implements Runnable {
 			process = builder.start();
 			reader = new BufferedReader(new InputStreamReader(
 					process.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				logger.debug("httrack: {}", line);
+			String line = "";
+			while (!Thread.currentThread().isInterrupted()) {
+				line = reader.readLine();
+				if (!line.isEmpty()) {
+					logger.debug("httrack: {}", line);
+				}
+				if (line.contains("Thanks for using HTTrack!")) {
+					break;
+				}
 			}
+
 			process.waitFor();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -62,14 +69,12 @@ public class Crawler implements Runnable {
 			process.destroy();
 		} finally {
 			try {
-
 				reader.close();
-
+				process.destroy();
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 			}
 		}
 		this.controller.crawlFinished(this.domain);
 	}
-
 }

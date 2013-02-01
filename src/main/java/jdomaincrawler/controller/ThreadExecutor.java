@@ -61,8 +61,12 @@ public class ThreadExecutor {
 				TimeUnit.SECONDS, queue);
 	}
 
-	public void executeTask(final Runnable task) {
+	public void executeTask(final Runnable task){
 		threadPool.execute(task);
+	}
+	
+	public void shutdownNow(){
+		threadPool.shutdownNow();
 	}
 
 	public void shutdown() {

@@ -34,6 +34,7 @@ public class Controller {
 				.getProperty("timeout", "2")));
 		domainFilesMap = new HashMap<String, Integer>();
 		threadExec.init();
+		Runtime.getRuntime().addShutdownHook(new ShutdownHook(threadExec));
 	}
 
 	public void generateCrawlers() {
@@ -53,6 +54,8 @@ public class Controller {
 					domain = m.group(1);
 					if (!domain.equals("dom")) {
 						domainName = domain.replaceAll("\\.", "_");
+						domainName=domainName.replaceAll("http://", "");
+						domain=domain.replaceAll("http://", "");
 						crawler = new Crawler(domain, PropertiesFactory
 								.getProperties().getProperty("crawlpath",
 										"~/crawler/")

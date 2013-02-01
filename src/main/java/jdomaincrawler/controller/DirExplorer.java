@@ -34,18 +34,29 @@ public class DirExplorer implements Runnable {
 		// controller.generateStrippers(files, domain);
 		List<String[]> files = new ArrayList<String[]>();
 		try {
-			CSVReader reader = new CSVReader(new FileReader(dir + "/hts-cache/new.txt"),'\t');
+			CSVReader reader = new CSVReader(new FileReader(dir
+					+ "/hts-cache/new.txt"), '\t');
 			List<String[]> myEntries = reader.readAll();
 			String[] line;
 			String[] domain;
-			for(int i=1; i<myEntries.size();i++){
-				line=myEntries.get(i);
+			for (int i = 1; i < myEntries.size(); i++) {
+				line = myEntries.get(i);
+				//überspringt leere Dateien
+				if(line[2].equals("0/0")){
+					continue;
+				}
 				domain = new String[2];
-				domain[0]=line[8];
-				domain[1]=line[7];
-				files.add(domain);
+				domain[0] = line[8];
+				domain[1] = line[7];
+				//übernimmt nur Dateine mit Endung. html oder .htm
+				if (domain[0].endsWith(".html") || domain[0].endsWith(".htm")) {
+					files.add(domain);
+				}
 			}
-			controller.generateStrippers(files, PropertiesFactory.getProperties().getProperty("output","")+"/"+this.domain);
+			controller.generateStrippers(files, PropertiesFactory
+					.getProperties().getProperty("output", "")
+					+ "/"
+					+ this.domain);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}

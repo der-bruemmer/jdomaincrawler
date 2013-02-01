@@ -1,7 +1,6 @@
 package jdomaincrawler.stripper;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Date;
 
 import jdomaincrawler.controller.Controller;
@@ -46,9 +45,10 @@ public class Stripper implements Runnable {
 
 	@Override
 	public final void run() {
-
 		logger.debug("Stripping {}", inputFile);
-			EncodingDetector detect = new EncodingDetector(new File(inputFile));
+		File file = new File(inputFile);
+		if (file != null) {
+			EncodingDetector detect = new EncodingDetector(file);
 			String encoding = detect.getBestEncoding();
 			SimpleHTML2Text ht;
 			ht = new SimpleHTML2Text(inputFile, encoding);
@@ -70,6 +70,7 @@ public class Stripper implements Runnable {
 			buffer.append("\n\n");
 			Writer w = new Writer();
 			w.write(buffer.toString(), outputFile);
+		}
 	}
 
 }
