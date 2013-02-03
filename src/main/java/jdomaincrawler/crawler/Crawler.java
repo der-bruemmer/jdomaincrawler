@@ -35,7 +35,7 @@ public class Crawler implements Runnable {
 		File f = new File(path);
 		f.mkdirs();
 		List<String> options = new ArrayList<String>();
-		options.add("/opt/local/bin/httrack");
+		options.add(PropertiesFactory.getProperties().getProperty("httrackpath","")+"httrack");
 		options.add(domain);
 		options.add("-O");
 		options.add(path);
