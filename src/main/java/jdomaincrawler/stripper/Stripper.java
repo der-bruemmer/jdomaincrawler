@@ -61,7 +61,8 @@ public class Stripper implements Runnable {
 			SimpleHTML2Text ht;
 			ht = new SimpleHTML2Text(inputFile, encoding);
 			String text = ht.getUTF8Text();
-			if (MINLENGTH >= text.length() && text.length() <= MAXLENGTH) {
+			text =text.trim();
+			if (MINLENGTH <= text.length() && text.length() <= MAXLENGTH) {
 				SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
 				StringBuffer buffer = new StringBuffer();
 				buffer.append("<source>");
