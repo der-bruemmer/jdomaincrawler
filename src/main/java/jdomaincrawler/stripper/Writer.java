@@ -12,17 +12,27 @@ public class Writer {
 
 	public void write(final String text, final String file) {
 		LockableFileWriter writer = null;
+		while (writer == null) {
+			try {
+				writer = new LockableFileWriter(file, true);
+			} catch (IOException e) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					logger.error(e1.getMessage());
+				}
+			}
+		}
 		try {
-			writer = new LockableFileWriter(file, true);
 			writer.append(text);
 			writer.flush();
 		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
+			logger.error(e.getMessage());
 		} finally {
 			try {
 				writer.close();
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
 			}
 		}
 	}

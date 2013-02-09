@@ -3,7 +3,9 @@ package jdomaincrawler.controller;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -42,16 +44,15 @@ public class DirExplorer implements Runnable {
 			for (int i = 1; i < myEntries.size(); i++) {
 				line = myEntries.get(i);
 				//überspringt leere Dateien
-				if(line[2].equals("0/0")){
+				if(line[1].equals("0/0") || line[3].contains("error")){
 					continue;
 				}
 				domain = new String[2];
 				domain[0] = line[8];
 				domain[1] = line[7];
 				//übernimmt nur Dateine mit Endung. html oder .htm
-				if (domain[0].endsWith(".html") || domain[0].endsWith(".htm")) {
+				
 					files.add(domain);
-				}
 			}
 			controller.generateStrippers(files, PropertiesFactory
 					.getProperties().getProperty("output", "")

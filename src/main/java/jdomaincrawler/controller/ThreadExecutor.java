@@ -96,4 +96,8 @@ public class ThreadExecutor {
 	public void setTimeout(final int timeout) {
 		this.timeout = timeout;
 	}
+	
+	public int getQueueSize(){
+		return threadPool.getQueue().size();
+	}
 }

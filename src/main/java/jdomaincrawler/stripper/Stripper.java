@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 
 import jdomaincrawler.controller.Controller;
+import jdomaincrawler.controller.PropertiesFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class Stripper implements Runnable {
 	private String url;
 	private Controller controller;
 	private Writer w;
+	private int MAXLENGTH;
+	private int MINLENGTH;
 
 	/**
 	 * 
@@ -42,18 +45,21 @@ public class Stripper implements Runnable {
 		this.controller = controller;
 		this.url = url;
 		this.w = new Writer();
+		MAXLENGTH=Integer.parseInt(PropertiesFactory.getProperties().getProperty("textmaxlength"));
+		MINLENGTH=Integer.parseInt(PropertiesFactory.getProperties().getProperty("textminlength"));
 	}
 
 	@Override
 	public final void run() {
 		logger.debug("Stripping {}", inputFile);
 		File file = new File(inputFile);
-		if (file != null) {
+		if (file.exists()) {
 			EncodingDetector detect = new EncodingDetector(file);
 			String encoding = detect.getBestEncoding();
 			SimpleHTML2Text ht;
 			ht = new SimpleHTML2Text(inputFile, encoding);
-			this.controller.stripFinished(this.outputFile);
+			String text=ht.getUTF8Text();
+			if(MINLENGTH>text.length()&&text.length()<MAXLENGTH){
 			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("<source>");
@@ -67,11 +73,10 @@ public class Stripper implements Runnable {
 			buffer.append(encoding);
 			buffer.append("</original_encoding>");
 			buffer.append("</source>");
-			buffer.append(ht.getUTF8Text());
+			buffer.append(text);
 			buffer.append("\n\n");
-
-			w.write(buffer.toString(), outputFile);
+			w.write(buffer.toString(), outputFile);}
+			this.controller.stripFinished(this.outputFile);
 		}
 	}
-
 }

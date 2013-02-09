@@ -1,9 +1,12 @@
 package jdomaincrawler.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,13 @@ public class Controller {
 	private Map<String, Integer> domainFilesMap;
 	private static String regexFile = "^.\\s(.+?)\\s+.*?";
 	private static int numberOfDomains;
+	private int numberOfLines;
+	private int crawled = 0;
+	private int stripped = 0;
+	private long offset = 0;
+	private int readedLines = 0;
+	private Map<String, Integer> filesToStrip;
+
 	public void init() {
 		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
 		threadExec = new ThreadExecutor();
@@ -34,67 +44,130 @@ public class Controller {
 				.getProperty("timeout", "2")));
 		domainFilesMap = new HashMap<String, Integer>();
 		threadExec.init();
+		filesToStrip = new HashMap<String, Integer>();
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook(threadExec));
+		numberOfLines = this.countLines();
 	}
 
-	public void generateCrawlers() {
-		BufferedReader reader;
+	private int countLines() {
+		LineNumberReader lnr = null;
+		int lines = 0;
 		try {
-			reader = new BufferedReader(new FileReader(PropertiesFactory
-					.getProperties().getProperty("domainfile")));
+			lnr = new LineNumberReader(new FileReader(
+					new File(PropertiesFactory.getProperties().getProperty(
+							"domainfile"))));
+			lnr.skip(Long.MAX_VALUE);
+			lines = lnr.getLineNumber();
+		} catch (FileNotFoundException e) {
+			logger.error(e.getMessage());
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		} finally {
+			try {
+				lnr.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}
+		}
+		return lines;
+	}
 
+	public synchronized void generateCrawlers() {
+		RandomAccessFile reader=null;
+		try {
+			reader = new RandomAccessFile(PropertiesFactory
+					.getProperties().getProperty("domainfile"), "r");
+			reader.seek(offset);
 			Pattern pattern = Pattern.compile(regexFile);
-			String domain;
+			String domain="";
 			String domainName;
 			Crawler crawler;
 			Matcher m;
-			while (reader.ready()) {
-				m = pattern.matcher(reader.readLine());
+			String line=null;
+			for (int i = 0; i < 100 && (line=reader.readLine())!=null; i++) {
+				m = pattern.matcher(line);
 				if (m.matches()) {
 					domain = m.group(1);
 					if (!domain.equals("dom")) {
-						domainName = domain.replaceAll("\\.", "_");
-						domainName=domainName.replaceAll("http://", "");
-						domain=domain.replaceAll("http://", "");
+						
+						domainName = domain;// .replaceAll("\\.", "_");
+						domainName = domainName.replaceAll("http://", "");
+						domain = domain.replaceAll("http://", "");
 						crawler = new Crawler(domain, PropertiesFactory
 								.getProperties().getProperty("crawlpath",
 										"~/crawler/")
 								+ domainName, this);
 						threadExec.executeTask(crawler);
 						numberOfDomains++;
+					} else {
+						readedLines--;
+						numberOfLines--;
 					}
+				} else {
+					readedLines--;
+					numberOfLines--;
 				}
+				readedLines++;
 			}
+			offset=reader.getFilePointer();
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());
 		} catch (IOException e) {
 			logger.error(e.getMessage());
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}
 		}
 	}
 
 	public void generateStrippers(final List<String[]> files,
 			final String domainOutput) {
 		Stripper stripper;
+		filesToStrip.put(domainOutput, files.size());
 		for (String[] file : files) {
-			stripper = new Stripper(file[0],file[1], domainOutput, this);
+			stripper = new Stripper(file[0], file[1], domainOutput, this);
 			threadExec.executeTask(stripper);
 		}
 		numberOfDomains--;
-		if (numberOfDomains == 0) {
+		if (numberOfDomains == 0 && readedLines >= numberOfLines - 1) {
 			threadExec.shutdown();
 		}
 	}
 
 	public synchronized void stripFinished(final String domain) {
-		logger.info("Domain {} finished",domain);
+		filesToStrip.put(domain, filesToStrip.get(domain) - 1);
+		if (filesToStrip.get(domain) == 0) {
+			String domainName = domain.substring(domain.lastIndexOf("/"));
+			logger.info("Textextraction of Domain {} finished ", domainName);
+			domainName = PropertiesFactory.getProperties().getProperty(
+					"crawlpath")
+					+ "/" + domainName;
+			try {
+				Runtime.getRuntime().exec("rm -rf " + domainName);
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}
+			stripped++;
+			logger.info("{} from {} domains stripped", crawled, numberOfLines);
+		}
+		
 	}
 
 	public synchronized void crawlFinished(final String domain) {
-		String dir = PropertiesFactory.getProperties().getProperty("crawlpath")
-				+ domain.replaceAll("\\.", "_");
-		threadExec.executeTask(new DirExplorer(dir, domain, this));
+		 String dir =
+		 PropertiesFactory.getProperties().getProperty("crawlpath")
+		 + domain.replaceAll("\\.", "_");
+		 threadExec.executeTask(new DirExplorer(dir, domain, this));
+		crawled++;
+		if (readedLines < numberOfLines - 1 && threadExec.getQueueSize()<1000) {
+			this.generateCrawlers();
+		}
+		logger.info("{} from {} domains crawled", crawled, numberOfLines);
 	}
-	
+
 	public static void main(String[] args) {
 		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
 		Controller c = new Controller();

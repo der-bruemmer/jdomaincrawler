@@ -73,6 +73,8 @@ public class Crawler implements Runnable {
 				process.destroy();
 			} catch (IOException e) {
 				logger.error(e.getMessage());
+			} catch (NullPointerException e){
+				logger.debug(e.getMessage());
 			}
 		}
 		this.controller.crawlFinished(this.domain);
