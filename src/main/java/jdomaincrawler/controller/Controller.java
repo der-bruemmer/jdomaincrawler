@@ -1,6 +1,5 @@
 package jdomaincrawler.controller;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,11 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import jdomaincrawler.crawler.Crawler;
 import jdomaincrawler.stripper.Stripper;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,6 @@ public class Controller {
 	private static Logger logger = LoggerFactory.getLogger(Controller.class);
 	private ThreadExecutor threadExec = new ThreadExecutor();
 	private Map<String, Integer> domainFilesMap;
-	private static String regexFile = "^.\\s(.+?)\\s+.*?";
 	private static int numberOfDomains;
 	private int numberOfLines;
 	private int crawled = 0;
@@ -73,24 +71,25 @@ public class Controller {
 	}
 
 	public synchronized void generateCrawlers() {
-		RandomAccessFile reader=null;
+		RandomAccessFile reader = null;
 		try {
-			reader = new RandomAccessFile(PropertiesFactory
-					.getProperties().getProperty("domainfile"), "r");
+			reader = new RandomAccessFile(PropertiesFactory.getProperties()
+					.getProperty("domainfile"), "r");
 			reader.seek(offset);
-			Pattern pattern = Pattern.compile(regexFile);
-			String domain="";
+			String domain = "";
 			String domainName;
 			Crawler crawler;
 			Matcher m;
-			String line=null;
-			for (int i = 0; i < 100 && (line=reader.readLine())!=null; i++) {
-				m = pattern.matcher(line);
-				if (m.matches()) {
-					domain = m.group(1);
-					if (!domain.equals("dom")) {
-						
-						domainName = domain;// .replaceAll("\\.", "_");
+			String line = null;
+			String[] lineParts;
+			UrlValidator urlValidator = new UrlValidator();
+			for (int i = 0; i < 100 && (line = reader.readLine()) != null; i++) {
+				lineParts = line.split("\\s");
+				boolean urlInline = false;
+				for (String part : lineParts) {
+					if (urlValidator.isValid(part)) {
+						domain = part;
+						domainName = domain;
 						domainName = domainName.replaceAll("http://", "");
 						domain = domain.replaceAll("http://", "");
 						crawler = new Crawler(domain, PropertiesFactory
@@ -99,17 +98,19 @@ public class Controller {
 								+ domainName, this);
 						threadExec.executeTask(crawler);
 						numberOfDomains++;
-					} else {
-						readedLines--;
-						numberOfLines--;
+						urlInline = true;
+						break;
 					}
+				}
+				if (urlInline) {
+					readedLines++;
 				} else {
-					readedLines--;
+					// die Zeile entspricht kein domain der gecrwalt werden
+					// muss, der Anzahl an Zeilen wird deswegen reduziert.
 					numberOfLines--;
 				}
-				readedLines++;
 			}
-			offset=reader.getFilePointer();
+			offset = reader.getFilePointer();
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());
 		} catch (IOException e) {
@@ -153,16 +154,15 @@ public class Controller {
 			stripped++;
 			logger.info("{} from {} domains stripped", crawled, numberOfLines);
 		}
-		
+
 	}
 
 	public synchronized void crawlFinished(final String domain) {
-		 String dir =
-		 PropertiesFactory.getProperties().getProperty("crawlpath")
-		 + domain.replaceAll("\\.", "_");
-		 threadExec.executeTask(new DirExplorer(dir, domain, this));
+		String dir = PropertiesFactory.getProperties().getProperty("crawlpath")
+				+ domain;
+		threadExec.executeTask(new DirExplorer(dir, domain, this));
 		crawled++;
-		if (readedLines < numberOfLines - 1 && threadExec.getQueueSize()<1000) {
+		if (readedLines < numberOfLines - 1 && threadExec.getQueueSize() < 1000) {
 			this.generateCrawlers();
 		}
 		logger.info("{} from {} domains crawled", crawled, numberOfLines);

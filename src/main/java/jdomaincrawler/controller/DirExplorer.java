@@ -15,7 +15,7 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class DirExplorer implements Runnable {
 
-	private String dir = "/Users/didier/cralwer/";
+	private String dir = "";
 	private Controller controller;
 	private String domain;
 

@@ -54,7 +54,7 @@ public class Crawler implements Runnable {
 			String line = "";
 			while (!Thread.currentThread().isInterrupted()) {
 				line = reader.readLine();
-				if (!line.isEmpty()) {
+				if (line!=null) {
 					logger.debug("httrack: {}", line);
 				}
 				if (line.contains("Thanks for using HTTrack!")) {
