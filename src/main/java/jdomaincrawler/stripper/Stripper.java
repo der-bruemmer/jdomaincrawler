@@ -45,8 +45,10 @@ public class Stripper implements Runnable {
 		this.controller = controller;
 		this.url = url;
 		this.w = new Writer();
-		MAXLENGTH=Integer.parseInt(PropertiesFactory.getProperties().getProperty("textmaxlength"));
-		MINLENGTH=Integer.parseInt(PropertiesFactory.getProperties().getProperty("textminlength"));
+		MAXLENGTH = Integer.parseInt(PropertiesFactory.getProperties()
+				.getProperty("textmaxlength"));
+		MINLENGTH = Integer.parseInt(PropertiesFactory.getProperties()
+				.getProperty("textminlength"));
 	}
 
 	@Override
@@ -58,25 +60,26 @@ public class Stripper implements Runnable {
 			String encoding = detect.getBestEncoding();
 			SimpleHTML2Text ht;
 			ht = new SimpleHTML2Text(inputFile, encoding);
-			String text=ht.getUTF8Text();
-			if(MINLENGTH>text.length()&&text.length()<MAXLENGTH){
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-			StringBuffer buffer = new StringBuffer();
-			buffer.append("<source>");
-			buffer.append("<location>");
-			buffer.append(url);
-			buffer.append("</location>");
-			buffer.append("<date>");
-			buffer.append(sdf.format(new Date(System.currentTimeMillis())));
-			buffer.append("</date>");
-			buffer.append("<original_encoding>");
-			buffer.append(encoding);
-			buffer.append("</original_encoding>");
-			buffer.append("</source>");
-			buffer.append(text);
-			buffer.append("\n\n");
-			w.write(buffer.toString(), outputFile);}
-			this.controller.stripFinished(this.outputFile);
+			String text = ht.getUTF8Text();
+			if (MINLENGTH >= text.length() && text.length() <= MAXLENGTH) {
+				SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<source>");
+				buffer.append("<location>");
+				buffer.append(url);
+				buffer.append("</location>");
+				buffer.append("<date>");
+				buffer.append(sdf.format(new Date(System.currentTimeMillis())));
+				buffer.append("</date>");
+				buffer.append("<original_encoding>");
+				buffer.append(encoding);
+				buffer.append("</original_encoding>");
+				buffer.append("</source>");
+				buffer.append(text);
+				buffer.append("\n\n");
+				w.write(buffer.toString(), outputFile);
+			}
 		}
+		this.controller.stripFinished(this.outputFile);
 	}
 }

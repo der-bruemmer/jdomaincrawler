@@ -88,7 +88,12 @@ public class Controller {
 				boolean urlInline = false;
 				for (String part : lineParts) {
 					if (urlValidator.isValid(part)) {
-						domain = part;
+						//Falls die url mit / endet lösche es, da es beim löschen der gecrawlte Dateien zu Problemen führen kann
+						if(part.endsWith("/")){
+							domain=part.substring(0, part.length()-1);
+						} else {
+							domain=part;
+						}
 						domainName = domain;
 						domainName = domainName.replaceAll("http://", "");
 						domain = domain.replaceAll("http://", "");
@@ -153,8 +158,7 @@ public class Controller {
 			}
 			stripped++;
 			logger.info("{} from {} domains stripped", crawled, numberOfLines);
-		}
-
+		} 
 	}
 
 	public synchronized void crawlFinished(final String domain) {
