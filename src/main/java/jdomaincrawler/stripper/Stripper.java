@@ -52,10 +52,10 @@ public class Stripper implements Runnable {
 	}
 
 	@Override
-	public final void run() {
-		logger.debug("Stripping {}", inputFile);
+	public final void run() {		
 		File file = new File(inputFile);
 		if (file.exists()) {
+			logger.debug("Stripping {}", inputFile);
 			EncodingDetector detect = new EncodingDetector(file);
 			String encoding = detect.getBestEncoding();
 			SimpleHTML2Text ht;

@@ -34,12 +34,6 @@ public class Controller {
 	public void init() {
 		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
 		threadExec = new ThreadExecutor();
-		threadExec.setMaxPoolSize(Integer.valueOf(PropertiesFactory
-				.getProperties().getProperty("maxPoolSize", "8")));
-		threadExec.setPoolSize(Integer.valueOf(PropertiesFactory
-				.getProperties().getProperty("poolSize", "2")));
-		threadExec.setTimeout(Integer.valueOf(PropertiesFactory.getProperties()
-				.getProperty("timeout", "2")));
 		domainFilesMap = new HashMap<String, Integer>();
 		threadExec.init();
 		filesToStrip = new HashMap<String, Integer>();
@@ -147,7 +141,7 @@ public class Controller {
 		filesToStrip.put(domain, filesToStrip.get(domain) - 1);
 		if (filesToStrip.get(domain) == 0) {
 			String domainName = domain.substring(domain.lastIndexOf("/"));
-			logger.info("Textextraction of Domain {} finished ", domainName);
+			logger.info("Textextraction of Domain {} finished ", domain);
 			domainName = PropertiesFactory.getProperties().getProperty(
 					"crawlpath")
 					+ "/" + domainName;
