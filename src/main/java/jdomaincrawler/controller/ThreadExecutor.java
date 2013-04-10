@@ -57,7 +57,6 @@ public class ThreadExecutor {
 		queue = new PriorityBlockingQueue<Runnable>(
 				Integer.valueOf(PropertiesFactory.getProperties().getProperty(
 						"queueLength", "11")), comp);
-		System.out.println(poolSize);
 		threadPool = new ThreadPoolExecutor(poolSize, maxPoolSize, timeout,
 				TimeUnit.SECONDS, queue);
 	}
