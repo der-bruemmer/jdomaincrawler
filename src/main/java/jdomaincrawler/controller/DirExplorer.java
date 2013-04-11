@@ -35,6 +35,7 @@ public class DirExplorer implements Runnable {
 		// List<String> files = findFiles(f.list(), f.getAbsolutePath());
 		// controller.generateStrippers(files, domain);
 		List<String[]> files = new ArrayList<String[]>();
+		int nbFiles = Integer.parseInt(PropertiesFactory.getProperties().getProperty("filesperfolder"));
 		try {
 			CSVReader reader = new CSVReader(new FileReader(dir
 					+ "/hts-cache/new.txt"), '\t');
@@ -55,9 +56,10 @@ public class DirExplorer implements Runnable {
 					files.add(domain);
 			}
 			controller.generateStrippers(files, PropertiesFactory
-					.getProperties().getProperty("output", "")
-					+ "/"
-					+ this.domain);
+					.getProperties().getProperty("output")
+					+ "/"+Controller.outputFiles/nbFiles+"/"
+					+ this.domain+".txt");
+			Controller.outputFiles++;
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}

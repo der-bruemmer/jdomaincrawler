@@ -30,6 +30,7 @@ public class Controller {
 	private long offset = 0;
 	private int readedLines = 0;
 	private Map<String, Integer> filesToStrip;
+	public static int outputFiles=0;
 
 	public void init() {
 		PropertiesFactory.loadProperties("jdomaincrawler.properties", true);
