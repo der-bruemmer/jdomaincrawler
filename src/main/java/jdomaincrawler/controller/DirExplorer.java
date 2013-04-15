@@ -35,7 +35,7 @@ public class DirExplorer implements Runnable {
 		// List<String> files = findFiles(f.list(), f.getAbsolutePath());
 		// controller.generateStrippers(files, domain);
 		List<String[]> files = new ArrayList<String[]>();
-		int nbFiles = Integer.parseInt(PropertiesFactory.getProperties().getProperty("filesperfolder"));
+		int nbFiles = Integer.parseInt(PropertiesFactory.getProperties().getProperty("filesperfolder","100"));
 		try {
 			CSVReader reader = new CSVReader(new FileReader(dir
 					+ "/hts-cache/new.txt"), '\t');
